@@ -5,13 +5,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
+
+#define N_BYTES_PALAVRA 4
 
 namespace cache{
 
     struct Block{
         int validityBit{},
         tag{},
-        accesOrder{}; // A real one also has data
+        accessOrder{}; // A real one also has data
     };
     
     class Cache{
@@ -23,13 +26,11 @@ namespace cache{
             numOfWordsPerBlock,	    // Número de palavras do bloco
             numOfSets;	
 
-            // Constructors/destructor:
             Cache();
             Cache(unsigned numOfBlocks, unsigned assoc, unsigned numOfWordsPerBlock);
             ~Cache();
 
-            // Other methods
-            int findInsert(unsigned address);
+            int findInsert(int address);
             Block* getBlocks();
 
         private:
@@ -40,20 +41,27 @@ namespace cache{
 }
 
 
-struct cacheAccesData{
+class cacheAccesData{
+    public:
+
     ~cacheAccesData(){ 
         fclose(traceFile); 
         std::cout << "Cache traceFile closed!" << std::endl;
     }
 
     FILE* traceFile;
-    cache::Cache newCache;
-    unsigned    numOfInstructionAccess,
-                numOfDataAccess,
-                numOfL1Failure;
+
+    unsigned cacheConfigs[9]{}; // Each 3 numebers correspond to a cache config, so we can have 3 caches (data, instructions, level 2)
+    unsigned    numOfInstL1Access{},
+                numOfDataL1Access{},
+                numOfL1Failure{},
+                numOfInstL2Access{},
+                numOfL2Failure{};
+
+    void displayData();
 
 };
-// This ufnciton reads config file, returns a new cache and set traceFile;
-cacheAccesData startCache(int argc, char **argv);
+// This ufnciton reads config file, returns vector of configs and sets a traceFile;
+cacheAccesData& startCache(int argc, char **argv);
 
 #endif
