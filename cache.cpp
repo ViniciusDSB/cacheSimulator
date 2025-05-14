@@ -100,16 +100,38 @@ Block* Cache::getBlocks(){ return blocks; }
 
 }
 
-void cacheAccessInfo::displayData(){
-	{
-        // Imprime medidas de desempenho
-        printf("%-25s %d\n", "Acessos L1:", numOfL1Access);
-		printf("%-25s %d\n", "Acessos Inst L1:", numOfInstL1Access);
-		printf("%-25s %d\n", "Acessos Dados L1:", numOfDataL1Access);
-		printf("%-25s %d\n", "Falhas L1:", numOfL1Failure);
-		printf("\n"); // Spacer
-		printf("%-25s %d\n", "Acessos L2:", numOfInstL2Access);
-		printf("%-25s %d\n", "Falhas L2:", numOfL2Failure);
+void cacheAccessInfo::displayData()
+{
+    printf("\n========== RELATÓRIO FINAL ==========\n");
 
+    printf("%-25s %d\n", "Acessos L1:", numOfL1Access);
+    printf("%-25s %d\n", "Acessos Inst L1:", numOfInstL1Access);
+    printf("%-25s %d\n", "Acessos Dados L1:", numOfDataL1Access);
+    printf("%-25s %d\n", "Falhas L1:", numOfL1Failure);
+
+    if(numOfL1Access > 0)
+	{
+        float taxaFalhaL1 = 100.0f * numOfL1Failure / numOfL1Access;
+		float taxaFalhaGlobal = 100.0f * numOfL2Failure / numOfL1Access;
+
+		printf("\n%-25s %.2f%%\n", "Taxa de falha GLOBAL:", taxaFalhaGlobal);
+        printf("%-25s %.2f%%\n", "Taxa de acerto GLOBAL:", 100.0f - taxaFalhaGlobal);
+
+        printf("%-25s %.2f%%\n", "Taxa de falha L1:", taxaFalhaL1);
+        printf("%-25s %.2f%%\n", "Taxa de acerto L1:", 100.0f - taxaFalhaL1);
     }
+
+
+    printf("\n");
+
+    printf("%-25s %d\n", "Acessos L2:", numOfInstL2Access);
+    printf("%-25s %d\n", "Falhas L2:", numOfL2Failure);
+
+    if(numOfInstL2Access > 0){
+        float taxaFalhaL2 = 100.0f * numOfL2Failure / numOfInstL2Access;
+        printf("%-25s %.2f%%\n", "Taxa de falha L2:", taxaFalhaL2);
+        printf("%-25s %.2f%%\n", "Taxa de acerto L2:", 100.0f - taxaFalhaL2);
+    }
+
+    printf("=====================================\n\n");
 }
