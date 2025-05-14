@@ -1,10 +1,11 @@
 #include "cache.h"
 
-namespace cache{
-
+namespace cache
+{
 // Definition of Cache constructor:
 Cache::Cache(){} 
-Cache::Cache(unsigned numOfBlocks, unsigned assoc, unsigned numOfWordsPerBlock){
+Cache::Cache(unsigned numOfBlocks, unsigned assoc, unsigned numOfWordsPerBlock)
+{
     this->numOfBlocks = numOfBlocks;
     this->assoc = assoc;
     this->numOfWordsPerBlock = numOfWordsPerBlock;
@@ -13,16 +14,19 @@ Cache::Cache(unsigned numOfBlocks, unsigned assoc, unsigned numOfWordsPerBlock){
     this->blocks = new Block [numOfBlocks]{};
 }
 
-Cache::~Cache(){
-	free(blocks);
+Cache::~Cache()
+{
+    delete[] blocks;
     std::cout << "Blocks freed!" << std::endl;
 }
 
-int Cache::findInsert(int address){
+int Cache::findInsert(int address)
+{
     
     int wordAddress,
 		 blockAddres,
 		 /*index*/
+		 setIndex,
 		 realIndex,
 		 tag,
 		 indexHit,	// Posição que causou acerto
@@ -33,11 +37,11 @@ int Cache::findInsert(int address){
 		 result;
 
 	// Interpreta bits do endereço de memória acessado
-	wordAddress = address	  / N_BYTES_PALAVRA;
+	wordAddress = address / N_BYTES_PALAVRA;
 	blockAddres = wordAddress / numOfWordsPerBlock;
-	// index       = blockAddres % numOfSets;	   Calculated based on set-way assoc (i calc index as its 1 way)
-	realIndex 	= blockAddres % numOfBlocks;	// Calculated directly for blocks vector acces
-	tag         = blockAddres / numOfSets;
+	setIndex = blockAddres % numOfSets;
+	realIndex = setIndex * assoc;
+	tag = blockAddres / numOfSets;
 
 	// Procura dado na cache
 	indexHit 	= -1;
@@ -96,7 +100,7 @@ Block* Cache::getBlocks(){ return blocks; }
 
 }
 
-void cacheAccesData::displayData(){
+void cacheAccessInfo::displayData(){
 	{
         // Imprime medidas de desempenho
         printf("%-25s %d\n", "Acessos L1:", numOfL1Access);

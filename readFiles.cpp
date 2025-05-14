@@ -1,9 +1,9 @@
 #include "cache.h"
 
-cacheAccesData accesData{};
+cacheAccessInfo accesData{};
 
 // Definition of this function is the same as the given method for simbasica
-cacheAccesData& startCache(int argc, char **argv){
+cacheAccessInfo& startCache(int argc, char **argv){
 
     char nomeArqConfig[100],
 		  traceFileName[100];
@@ -33,6 +33,7 @@ cacheAccesData& startCache(int argc, char **argv){
 	}
 
 	fclose(arqConfig);
+	printf("Configs have been read! \n");
 
 	// Abre arquivo de acessos
 	strcpy(traceFileName, argv[2]);

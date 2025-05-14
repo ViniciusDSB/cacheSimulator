@@ -9,8 +9,8 @@
 
 #define N_BYTES_PALAVRA 4
 
-namespace cache{
-
+namespace cache
+{
     struct Block{
         int validityBit{},
         tag{},
@@ -41,12 +41,15 @@ namespace cache{
 }
 
 
-class cacheAccesData{
+class cacheAccessInfo
+{
     public:
 
-    ~cacheAccesData(){ 
-        fclose(traceFile); 
-        std::cout << "Cache traceFile closed!" << std::endl;
+    ~cacheAccessInfo(){ 
+        if (traceFile) {
+            fclose(traceFile); 
+            std::cout << "Cache traceFile closed!" << std::endl;
+        }
     }
 
     FILE* traceFile;
@@ -63,6 +66,6 @@ class cacheAccesData{
 
 };
 // This ufnciton reads config file, returns vector of configs and sets a traceFile;
-cacheAccesData& startCache(int argc, char **argv);
+cacheAccessInfo& startCache(int argc, char **argv);
 
 #endif

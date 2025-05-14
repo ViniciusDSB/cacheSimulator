@@ -1,53 +1,58 @@
 #include "cache.h"
 
 
-
 int main(int argc, char **argv){
 
     using namespace cache;
 
-    cacheAccesData& cacheData = startCache(argc, argv);
+    cacheAccessInfo& cacheInfo = startCache(argc, argv);
+
     cache::Cache instCache{
-			cacheData.cacheConfigs[0],
-			cacheData.cacheConfigs[1],
-			cacheData.cacheConfigs[2]
+			cacheInfo.cacheConfigs[0],
+			cacheInfo.cacheConfigs[1],
+			cacheInfo.cacheConfigs[2]
 		};
-	cache::Cache* dataCache = ( cacheData.cacheConfigs[3] )? 
+	cache::Cache* dataCache = ( cacheInfo.cacheConfigs[3] != 0 )? 
 		new cache::Cache(
-			cacheData.cacheConfigs[3],
-			cacheData.cacheConfigs[4],
-			cacheData.cacheConfigs[5]
+			cacheInfo.cacheConfigs[3],
+			cacheInfo.cacheConfigs[4],
+			cacheInfo.cacheConfigs[5]
 		) : nullptr ;
-	cache::Cache* l2Cache = ( cacheData.cacheConfigs[6] )? 
+	cache::Cache* l2Cache = ( cacheInfo.cacheConfigs[6] != 0)? 
 		new cache::Cache(
-			cacheData.cacheConfigs[6],
-			cacheData.cacheConfigs[7],
-			cacheData.cacheConfigs[8]
+			cacheInfo.cacheConfigs[6],
+			cacheInfo.cacheConfigs[7],
+			cacheInfo.cacheConfigs[8]
 		) : nullptr ;
 
-    FILE* &traceFile = cacheData.traceFile;
+	// For verification only;
+	printf("You have Level 1 cache; \n");
+    if(dataCache != nullptr)
+		printf("You have instructions cache and data cache; \n");
+	if(l2Cache != nullptr)
+		printf("You have Level 2 cache; \n");
     
     char tipoAcesso; // Instruction read, Load or Store data (I, L, S)
 	int accessRequest,
 		 resultAcesso,
 		 endereco;
 
-	while (! feof(traceFile)){
+	while (! feof(cacheInfo.traceFile)){
 
-		accessRequest= fscanf(traceFile, "%c %d\n", &tipoAcesso, &endereco);
+		accessRequest= fscanf(cacheInfo.traceFile, "%c %d\n", &tipoAcesso, &endereco);
 
 		if ((accessRequest != 0) && (accessRequest != EOF))
 		{
 			if (tipoAcesso == 'I') // Instruction reading
 			{
-				cacheData.numOfL1Access++;
-				cacheData.numOfInstL1Access++;
+				cacheInfo.numOfL1Access++;
+				cacheInfo.numOfInstL1Access++;
 				resultAcesso = instCache.findInsert(endereco);
 			}	
 			else // Read or write data
 			{
-				cacheData.numOfL1Access++;
-				cacheData.numOfDataL1Access++;
+				cacheInfo.numOfL1Access++;
+				cacheInfo.numOfDataL1Access++;
 
 				// If data cache is defined, access it, else, acces the global instCache;
 				resultAcesso = ( dataCache != nullptr ) ? 
@@ -58,27 +63,20 @@ int main(int argc, char **argv){
 			// If there was a failure in cache L1 (instaCache and dataCache) we acces cache L2 if exists
 			if (resultAcesso != 0)
 			{
-				cacheData.numOfL1Failure++;
+				cacheInfo.numOfL1Failure++;
 
 				if( l2Cache != nullptr)
 				{
-					cacheData.numOfInstL2Access++;
+					cacheInfo.numOfInstL2Access++;
 					if( l2Cache->findInsert(endereco) != 0)
-						cacheData.numOfL2Failure++;
+						cacheInfo.numOfL2Failure++;
 				}
 					
 			}
 		}
 	}
 
-
-	// auto myBlocks = instCache.getBlocks();
-	// printf(" V - Tag - Order \n");
-	// for(int i{}; i < instCache.numOfBlocks; i++){
-	// 	printf(" %d - %d - %d \n", myBlocks[i].validityBit, myBlocks[i].tag, myBlocks[i].accessOrder);
-	// }
-
-    cacheData.displayData();
+    cacheInfo.displayData();
 
     return 0;
 }
