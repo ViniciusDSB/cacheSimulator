@@ -40,11 +40,13 @@ int main(int argc, char **argv){
 		{
 			if (tipoAcesso == 'I') // Instruction reading
 			{
+				cacheData.numOfL1Access++;
 				cacheData.numOfInstL1Access++;
 				resultAcesso = instCache.findInsert(endereco);
 			}	
 			else // Read or write data
 			{
+				cacheData.numOfL1Access++;
 				cacheData.numOfDataL1Access++;
 
 				// If data cache is defined, access it, else, acces the global instCache;

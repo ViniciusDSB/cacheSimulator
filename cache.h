@@ -52,7 +52,8 @@ class cacheAccesData{
     FILE* traceFile;
 
     unsigned cacheConfigs[9]{}; // Each 3 numebers correspond to a cache config, so we can have 3 caches (data, instructions, level 2)
-    unsigned    numOfInstL1Access{},
+    unsigned    numOfL1Access{},
+                numOfInstL1Access{},
                 numOfDataL1Access{},
                 numOfL1Failure{},
                 numOfInstL2Access{},

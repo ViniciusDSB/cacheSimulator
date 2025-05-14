@@ -99,8 +99,8 @@ Block* Cache::getBlocks(){ return blocks; }
 void cacheAccesData::displayData(){
 	{
         // Imprime medidas de desempenho
-        printf("%-25s %d\n", "Acessos L1:", numOfInstL1Access);
-		printf("%-25s %d\n", "Acessos Inst L1:", numOfInstL1Access - numOfDataL1Access);
+        printf("%-25s %d\n", "Acessos L1:", numOfL1Access);
+		printf("%-25s %d\n", "Acessos Inst L1:", numOfInstL1Access);
 		printf("%-25s %d\n", "Acessos Dados L1:", numOfDataL1Access);
 		printf("%-25s %d\n", "Falhas L1:", numOfL1Failure);
 		printf("\n"); // Spacer
