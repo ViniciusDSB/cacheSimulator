@@ -48,6 +48,8 @@ int main(int argc, char **argv){
 				cacheInfo.numOfL1Access++;
 				cacheInfo.numOfInstL1Access++;
 				resultAcesso = instCache.findInsert(endereco);
+
+				if(resultAcesso != 0) { cacheInfo.numOfInstL1Failure++; }
 			}	
 			else // Read or write data
 			{
@@ -57,7 +59,9 @@ int main(int argc, char **argv){
 				// If data cache is defined, access it, else, acces the global instCache;
 				resultAcesso = ( dataCache != nullptr ) ? 
 					dataCache->findInsert(endereco) : 
-					instCache.findInsert(endereco); 
+					instCache.findInsert(endereco);
+
+					if(resultAcesso != 0) { cacheInfo.numOfDataL1Failure++; }
 			}
 
 			// If there was a failure in cache L1 (instaCache and dataCache) we acces cache L2 if exists
@@ -66,12 +70,20 @@ int main(int argc, char **argv){
 				cacheInfo.numOfL1Failure++;
 
 				if( l2Cache != nullptr)
-				{
-					cacheInfo.numOfInstL2Access++;
-					if( l2Cache->findInsert(endereco) != 0)
+				{	
+					cacheInfo.numOfL2Access++;
+					if( tipoAcesso == 'I') cacheInfo.numOfInstL2Access++;
+					else cacheInfo.numOfDataL2Access++;
+
+					resultAcesso = l2Cache->findInsert(endereco);
+					if( resultAcesso != 0) 
+					{
 						cacheInfo.numOfL2Failure++;
-				}
-					
+						
+						if( tipoAcesso == 'I') cacheInfo.numOfInstL2Failure++;
+						else  cacheInfo.numOfDataL2Failure++;
+					}
+				}	
 			}
 		}
 	}

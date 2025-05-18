@@ -24,7 +24,7 @@ namespace cache
             unsigned numOfBlocks,	// Número total de blocos da cache
             assoc,		            // Número de blocos por conjunto
             numOfWordsPerBlock,	    // Número de palavras do bloco
-            numOfSets;	
+            numOfSets;
 
             Cache();
             Cache(unsigned numOfBlocks, unsigned assoc, unsigned numOfWordsPerBlock);
@@ -56,11 +56,17 @@ class cacheAccessInfo
 
     unsigned cacheConfigs[9]{}; // Each 3 numebers correspond to a cache config, so we can have 3 caches (data, instructions, level 2)
     unsigned    numOfL1Access{},
-                numOfInstL1Access{},
-                numOfDataL1Access{},
                 numOfL1Failure{},
+                numOfInstL1Access{},
+                numOfInstL1Failure{},
+                numOfDataL1Access{},
+                numOfDataL1Failure{},
+                numOfL2Access{},
+                numOfL2Failure{},
                 numOfInstL2Access{},
-                numOfL2Failure{};
+                numOfInstL2Failure{},
+                numOfDataL2Access{},
+                numOfDataL2Failure{};
 
     void displayData();
 

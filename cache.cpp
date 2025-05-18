@@ -25,7 +25,6 @@ int Cache::findInsert(int address)
     
     int wordAddress,
 		 blockAddres,
-		 /*index*/
 		 setIndex,
 		 realIndex,
 		 tag,
@@ -104,33 +103,46 @@ void cacheAccessInfo::displayData()
 {
     printf("\n========== RELATÓRIO FINAL ==========\n");
 
-    printf("%-25s %d\n", "Acessos L1:", numOfL1Access);
-    printf("%-25s %d\n", "Acessos Inst L1:", numOfInstL1Access);
-    printf("%-25s %d\n", "Acessos Dados L1:", numOfDataL1Access);
-    printf("%-25s %d\n", "Falhas L1:", numOfL1Failure);
+    printf("%-27s %d\n", "Acessos L1:", numOfL1Access);
+	printf("%-27s %d\n", "Falhas L1:", numOfL1Failure);
+    printf("%-27s %d\n", "Acessos Inst L1:", numOfInstL1Access);
+	printf("%-27s %d\n", "Falhas Inst L1:", numOfInstL1Failure);
+    printf("%-27s %d\n", "Acessos Dados L1:", numOfDataL1Access);
+	printf("%-27s %d\n", "Falhas Dados L1:", numOfDataL1Failure);
 
     if(numOfL1Access > 0)
 	{
-        float taxaFalhaL1 = 100.0f * numOfL1Failure / numOfL1Access;
-		float taxaFalhaGlobal = 100.0f * numOfL2Failure / numOfL1Access;
+        float taxaFalhaL1 = 100.0f *  numOfL1Failure / numOfL1Access;
+		float taxaFalhaInstL1 = 100.0f *  numOfInstL1Failure / numOfInstL1Access;
+		float taxaFalhaDataL1 = 100.0f *  numOfDataL1Failure / numOfDataL1Access;
 
-		printf("\n%-25s %.2f%%\n", "Taxa de falha GLOBAL:", taxaFalhaGlobal);
-        printf("%-25s %.2f%%\n", "Taxa de acerto GLOBAL:", 100.0f - taxaFalhaGlobal);
-
-        printf("%-25s %.2f%%\n", "Taxa de falha L1:", taxaFalhaL1);
-        printf("%-25s %.2f%%\n", "Taxa de acerto L1:", 100.0f - taxaFalhaL1);
+		printf("\n");
+		printf("%-27s %.2f%%\n", "Taxa de acerto L1:", 100.0f - taxaFalhaL1);
+        printf("%-27s %.2f%%\n", "Taxa de falha L1:", taxaFalhaL1);
+		printf("%-27s %.2f%%\n", "Taxa de falha de instrucoes L1:", taxaFalhaInstL1);
+		printf("%-27s %.2f%%\n", "Taxa de falha de dados L1:", taxaFalhaDataL1);
     }
 
 
-    printf("\n");
+    if(numOfL2Access > 0)
+	{
+		printf("\n");
+		printf("%-27s %d\n", "Acessos L2:", numOfL2Access);
+		printf("%-27s %d\n", "Falhas L2:", numOfL2Failure);
 
-    printf("%-25s %d\n", "Acessos L2:", numOfInstL2Access);
-    printf("%-25s %d\n", "Falhas L2:", numOfL2Failure);
+        float taxaFalhaL2 = 100.0f * numOfL2Failure / numOfL2Access;
+		float taxaFalhaInstL2 = 100.0f *  numOfInstL2Failure / numOfInstL2Access;
+		float taxaFalhaDataL2 = 100.0f *  numOfDataL2Failure / numOfDataL2Access;
 
-    if(numOfInstL2Access > 0){
-        float taxaFalhaL2 = 100.0f * numOfL2Failure / numOfInstL2Access;
-        printf("%-25s %.2f%%\n", "Taxa de falha L2:", taxaFalhaL2);
-        printf("%-25s %.2f%%\n", "Taxa de acerto L2:", 100.0f - taxaFalhaL2);
+		printf("%-27s %.2f%%\n", "Taxa de acerto L2:", 100.0f - taxaFalhaL2);
+        printf("%-27s %.2f%%\n", "Taxa de falha L2:", taxaFalhaL2);
+		printf("%-27s %.2f%%\n", "Taxa de falha de instrucoes L2:", taxaFalhaInstL2);
+		printf("%-27s %.2f%%\n", "Taxa de falha de dados L2:", taxaFalhaDataL2);
+
+		printf("\n---GLOBAIS---\n");
+		float taxaFalhaGlobal = 100.0f * numOfL2Failure / numOfL1Access;
+		printf("%-27s %.2f%%\n", "Taxa de acerto GLOBAL:", 100.0f - taxaFalhaGlobal);
+		printf("%-27s %.2f%%\n", "Taxa de falha GLOBAL:", taxaFalhaGlobal);
     }
 
     printf("=====================================\n\n");
